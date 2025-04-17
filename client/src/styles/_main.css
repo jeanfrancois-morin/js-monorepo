@@ -1,0 +1,31 @@
+body {
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    > header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--pico-spacing);
+    }
+
+    footer {
+      padding: var(--pico-spacing);
+      margin-top: auto;
+      text-align: center;
+    }
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 
+import { log } from "node:console";
 // Import access to data
 import itemRepository from "./itemRepository";
 
@@ -39,11 +40,12 @@ const read: RequestHandler = async (req, res, next) => {
 
 // The A of BREAD - Add (Create) operation
 const add: RequestHandler = async (req, res, next) => {
+  console.log("add", req.body);
   try {
     // Extract the item data from the request body
     const newItem = {
       title: req.body.title,
-      user_id: req.body.user_id,
+      user_id: null,
     };
 
     // Create the item
@@ -57,4 +59,25 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read, add };
+const update: RequestHandler = async (req, res, next) => {
+  try {
+    const itemId = Number(req.params.id);
+    const updatedItem = await itemRepository.update(itemId, req.body.title);
+    res.json({ updatedItem });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// The D of BREAD - Delete operation
+const remove: RequestHandler = async (req, res, next) => {
+  try {
+    const itemId = Number(req.params.id);
+    await itemRepository.delete(itemId);
+    res.sendStatus(204); // No Content
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, update, remove };
