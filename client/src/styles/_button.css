@@ -1,0 +1,10 @@
+.btn {
+  &.btn-block {
+    width: 100%;
+  }
+  &.btn-default {
+    padding: .5rem 1rem;
+    background-color: transparent;
+    /* color: #333; */
+  }
+}
