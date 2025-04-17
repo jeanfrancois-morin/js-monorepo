@@ -5,7 +5,7 @@ import type { Result, Rows } from "../../../database/client";
 type Item = {
   id: number;
   title: string;
-  user_id: number;
+  user_id: number | null;
 };
 
 class ItemRepository {
@@ -44,18 +44,37 @@ class ItemRepository {
   }
 
   // The U of CRUD - Update operation
-  // TODO: Implement the update operation to modify an existing item
+  async update(id: number, title: string) {
+    const [result] = await databaseClient.query<Result>(
+      "update item set title = ? where id = ?",
+      [title, id],
+    );
 
-  // async update(item: Item) {
-  //   ...
-  // }
+    // Check if any rows were affected
+    if (result.affectedRows === 0) {
+      throw new Error(`Item with id ${id} not found or no changes made.`);
+    }
+
+    // Return a success message or the updated item ID
+    return { id, title };
+  }
 
   // The D of CRUD - Delete operation
-  // TODO: Implement the delete operation to remove an item by its ID
+  async delete(id: number) {
+    // Execute the SQL DELETE query to remove an item by its ID
+    const [result] = await databaseClient.query<Result>(
+      "delete from item where id = ?",
+      [id],
+    );
 
-  // async delete(id: number) {
-  //   ...
-  // }
+    // Check if any rows were affected
+    if (result.affectedRows === 0) {
+      throw new Error(`Item with id ${id} not found.`);
+    }
+
+    // Return a success message or the deleted item ID
+    return { id };
+  }
 }
 
 export default new ItemRepository();
